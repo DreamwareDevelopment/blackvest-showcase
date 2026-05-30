@@ -1,0 +1,65 @@
+---
+import { site } from "../site.config";
+---
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="nav__brand" href="#top">
+      <span class="nav__mark" aria-hidden="true"></span>
+      <span class="nav__name">{site.identity.name}</span>
+    </a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#system">System</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#guardrails">Guardrails</a>
+      <a href="#candidate">Candidate</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--c-bg) 78%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid var(--c-line-soft);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 4rem;
+  }
+  .nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--c-text);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .nav__brand:hover { text-decoration: none; }
+  .nav__mark {
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 3px;
+    background: var(--c-accent);
+    box-shadow: 0 0 0 3px var(--c-accent-dim);
+  }
+  .nav__links {
+    display: flex;
+    gap: clamp(0.9rem, 2.5vw, 2rem);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .nav__links a {
+    color: var(--c-text-dim);
+    letter-spacing: 0.02em;
+  }
+  .nav__links a:hover { color: var(--c-accent); text-decoration: none; }
+  @media (max-width: 540px) {
+    .nav__links { display: none; }
+  }
+</style>

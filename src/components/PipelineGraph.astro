@@ -1,0 +1,185 @@
+---
+// The career-* orchestration graph. Renders the ARCHITECTURE only:
+// the skills as named stages, the funnel they drive, and the human gate.
+// Deliberately shows no prompts, no scoring rubrics, no engine code
+// (ADR-019 invariant 6 — reveal depth = architecture + outcomes, never
+// implementation). Each stage is a black box with an input and an output.
+
+const stages = [
+  {
+    id: "source",
+    skill: "career-source",
+    role: "Discover",
+    out: "sourced",
+    body: "Finds real, current postings and fit-scores each against the candidate's history. Curates and ranks — it never maximizes count.",
+  },
+  {
+    id: "tailor",
+    skill: "career-jd-match · career-resume",
+    role: "Tailor",
+    out: "tailored",
+    body: "Decomposes the JD, scores fit, names the honest gaps, and produces a tailored résumé + pitch. Every claim traces to a real accomplishment.",
+  },
+  {
+    id: "assemble",
+    skill: "career-apply",
+    role: "Assemble",
+    out: "awaiting-approval",
+    body: "Builds the submission package — tailored résumé plus a cover letter — and presents it for review.",
+  },
+];
+
+const funnel = [
+  { k: "sourced", label: "Sourced" },
+  { k: "tailored", label: "Tailored" },
+  { k: "awaiting", label: "Awaiting approval" },
+  { k: "submitted", label: "Submitted" },
+  { k: "responded", label: "Responded" },
+  { k: "interview", label: "Interview" },
+  { k: "closed", label: "Closed" },
+];
+---
+
+<div class="graph">
+  <!-- Lane 1: the producing skills -->
+  <ol class="graph__stages" aria-label="Application-building stages">
+    {
+      stages.map((s, i) => (
+        <li class="stage panel reveal" style={`--i:${i}`}>
+          <div class="stage__head">
+            <span class="stage__role">{s.role}</span>
+            <code class="stage__skill">{s.skill}</code>
+          </div>
+          <p class="stage__body dim">{s.body}</p>
+          <div class="stage__out">
+            → <span class="stage__outk">{s.out}</span>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <!-- The human-approval gate: the load-bearing invariant -->
+  <div class="gate reveal" role="group" aria-label="Human approval gate">
+    <div class="gate__bar"></div>
+    <div class="gate__label">
+      <span class="gate__icon" aria-hidden="true">⏻</span>
+      <div>
+        <strong>Human approval gate</strong>
+        <p class="mute">
+          No application leaves without an explicit human “yes”. There is no
+          auto-approve path. The gate is the invariant; its transport
+          (a phone tap, a local prompt) is swappable.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lane 2: the funnel the system drives -->
+  <div class="funnel reveal" aria-label="Application funnel stages">
+    {
+      funnel.map((f, i) => (
+        <>
+          <div class={`pip pip--${f.k}`}>
+            <span class="pip__dot" aria-hidden="true" />
+            <span class="pip__label">{f.label}</span>
+          </div>
+          {i < funnel.length - 1 && <span class="pip__arrow" aria-hidden="true">→</span>}
+        </>
+      ))
+    }
+  </div>
+
+  <p class="graph__note mute">
+    A daily sweep (a scheduled routine) watches live applications and nudges
+    for the next decision — it detects, it never advances an outcome on its own.
+    Outcomes derive from each application’s furthest-reached stage, so the
+    conversion story stays honest even after an application closes.
+  </p>
+</div>
+
+<style>
+  .graph { display: flex; flex-direction: column; gap: var(--s-8); }
+
+  .graph__stages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-4);
+  }
+  @media (max-width: 760px) {
+    .graph__stages { grid-template-columns: 1fr; }
+  }
+  .stage { padding: var(--s-6); display: flex; flex-direction: column; gap: var(--s-3); }
+  .js .stage { transition-delay: calc(var(--i) * 90ms); }
+  .stage__head { display: flex; flex-direction: column; gap: var(--s-2); }
+  .stage__role {
+    font-size: var(--fs-h3);
+    font-weight: 650;
+  }
+  .stage__skill {
+    font-size: 0.78rem;
+    color: var(--c-accent);
+    background: var(--c-bg-sink);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-sm);
+    padding: 0.25rem 0.5rem;
+    align-self: flex-start;
+  }
+  .stage__body { font-size: var(--fs-small); line-height: var(--lh-snug); flex: 1; }
+  .stage__out { font-family: var(--font-mono); font-size: 0.8rem; color: var(--c-text-mute); }
+  .stage__outk { color: var(--c-text-dim); }
+
+  /* gate */
+  .gate { position: relative; }
+  .gate__bar {
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--c-accent-warm) 0 10px, transparent 10px 18px);
+    margin-bottom: var(--s-4);
+  }
+  .gate__label {
+    display: flex;
+    gap: var(--s-4);
+    align-items: flex-start;
+    background: color-mix(in srgb, var(--c-accent-warm) 8%, var(--c-bg-raise));
+    border: 1px solid color-mix(in srgb, var(--c-accent-warm) 30%, var(--c-line));
+    border-radius: var(--radius);
+    padding: var(--s-4) var(--s-6);
+  }
+  .gate__label strong { color: var(--c-text); }
+  .gate__label p { font-size: var(--fs-small); line-height: var(--lh-snug); margin-top: var(--s-1); }
+  .gate__icon {
+    font-size: 1.4rem;
+    color: var(--c-accent-warm);
+    line-height: 1;
+    margin-top: 0.1rem;
+  }
+
+  /* funnel */
+  .funnel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-3);
+    padding: var(--s-6);
+    background: var(--c-bg-sink);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+  }
+  .pip { display: inline-flex; align-items: center; gap: var(--s-2); }
+  .pip__dot {
+    width: 0.5rem; height: 0.5rem; border-radius: 50%;
+    background: var(--c-line);
+    box-shadow: 0 0 0 3px var(--c-bg-raise);
+  }
+  .pip--submitted .pip__dot,
+  .pip--responded .pip__dot,
+  .pip--interview .pip__dot { background: var(--c-accent); }
+  .pip--closed .pip__dot { background: var(--c-accent-warm); }
+  .pip__label { font-family: var(--font-mono); font-size: 0.75rem; color: var(--c-text-dim); letter-spacing: 0.02em; }
+  .pip__arrow { color: var(--c-text-mute); font-size: 0.8rem; }
+
+  .graph__note { font-size: var(--fs-small); line-height: var(--lh-snug); max-width: var(--maxw-prose); }
+</style>

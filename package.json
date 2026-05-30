@@ -1,0 +1,18 @@
+{
+  "name": "blackvest-showcase",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Public showcase for the blackvest career case-study system — the deep-dive-able portfolio artifact. Template-ready: instantiated per candidate, deployed to a blackvest.ai subdomain.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.16.18"
+  }
+}

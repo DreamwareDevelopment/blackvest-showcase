@@ -1,0 +1,69 @@
+---
+import { site } from "../site.config";
+---
+
+<section class="hero" id="top">
+  <div class="wrap hero__inner">
+    <p class="eyebrow">Career case-study system</p>
+
+    <h1 class="hero__title">
+      An agentic system pointed at one goal —<br />
+      <span class="hero__accent">getting {site.identity.name} hired.</span>
+    </h1>
+
+    <p class="lede hero__lede prose">
+      Not a résumé. A living system that sources roles, tailors applications,
+      and ships them through a human-approval gate — built so its
+      <em>reliability and legibility are the demonstration</em> of what an
+      operator can do in {site.identity.targetRoles}.
+    </p>
+
+    <div class="hero__meta">
+      <span class="tag">Human-in-the-loop</span>
+      <span class="tag">Multi-skill orchestration</span>
+      <span class="tag">Honest-by-construction</span>
+      <span class="tag">Deployed &amp; operated</span>
+    </div>
+
+    <a class="hero__cta" href="#system">
+      Read the architecture
+      <span aria-hidden="true">↓</span>
+    </a>
+  </div>
+
+  <div class="hero__rule" aria-hidden="true"></div>
+</section>
+
+<style>
+  .hero { padding-block: clamp(4rem, 12vh, 9rem) var(--s-16); }
+  .hero__inner { display: flex; flex-direction: column; gap: var(--s-6); }
+  .hero__title {
+    font-size: var(--fs-display);
+    max-width: 18ch;
+    margin-top: var(--s-2);
+  }
+  .hero__accent { color: var(--c-accent); }
+  .hero__lede { color: var(--c-text-dim); }
+  .hero__lede em { color: var(--c-text); font-style: normal; }
+  .hero__meta { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-2); }
+  .hero__cta {
+    margin-top: var(--s-4);
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-small);
+    color: var(--c-text);
+    border: 1px solid var(--c-line);
+    border-radius: 100px;
+    padding: 0.55rem 1.1rem;
+    transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .hero__cta:hover { border-color: var(--c-accent); color: var(--c-accent); text-decoration: none; }
+  .hero__rule {
+    margin-top: var(--s-16);
+    height: 1px;
+    background: linear-gradient(90deg, var(--c-accent), transparent 40%);
+  }
+</style>

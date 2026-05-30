@@ -1,0 +1,22 @@
+---
+# REFERENCE SHAPE ONLY — the .md.txt suffix keeps this out of the build.
+# Copy to `<slug>.md` and fill with REAL, publication-cleared content.
+kind: employment            # employment | venture
+company: "Example Co"
+title: "Founding AI Engineer"
+start: "2023-01"
+end: "present"              # YYYY-MM | present
+# outcome: "shut down 2024-06 — no PMF"   # ventures only
+summary: "Owned the agentic pipeline that did X for Y users."
+order: 100
+draft: false
+accomplishments:
+  - metric: "↓ 40% error rate"
+    statement: "Designed the eval harness that caught model regressions before release."
+    theme: catching-model-errors
+  - statement: "Built the multi-step orchestration graph coordinating N skills."
+    theme: agent-orchestration
+---
+
+Optional long-form narrative for this role renders below the accomplishments.
+Keep it tight, factual, and traceable to the underlying role note.
