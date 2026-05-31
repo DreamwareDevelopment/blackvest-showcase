@@ -38,9 +38,7 @@ export const site: SiteConfig = {
   candidates: [
     {
       name: 'Zander Pyle',
-      // INTERIM: points at the live pages.dev until zander-pyle.blackvest.ai
-      // resolves post-DNS. Swap to https://zander-pyle.blackvest.ai at attach.
-      url: 'https://zander-pyle.pages.dev',
+      url: 'https://zander-pyle.blackvest.ai',
       blurb: 'AI operations · solutions engineering · agent orchestration',
     },
   ],
