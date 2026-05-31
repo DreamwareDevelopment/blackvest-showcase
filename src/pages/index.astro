@@ -1,16 +1,10 @@
 ---
-import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Nav from "../components/Nav.astro";
 import Hero from "../components/Hero.astro";
 import PipelineGraph from "../components/PipelineGraph.astro";
+import InTheWild from "../components/InTheWild.astro";
 import { site } from "../site.config";
-
-// Layer A source. Empty until a reviewed copy-over of real role notes lands.
-const roles = (await getCollection("roles", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.order - a.data.order,
-);
-const hasRoles = roles.length > 0;
 
 // Layer B — the guardrail philosophy, stated as principles (not code).
 const guardrails = [
@@ -45,18 +39,6 @@ const guardrails = [
     body: "The system curates targets; it never maximizes application count. The story this funnel tells is conversion, not top-of-funnel width.",
   },
 ];
-
-const themes: Record<string, string> = {
-  "agent-orchestration": "Agent orchestration",
-  "ai-implementation": "AI implementation",
-  "catching-model-errors": "Catching model errors",
-  "solutions-engineering": "Solutions engineering",
-  ownership: "Ownership",
-};
-
-function fmtRange(start: string, end: string) {
-  return `${start} – ${end === "present" ? "Present" : end}`;
-}
 ---
 
 <BaseLayout>
@@ -198,94 +180,18 @@ function fmtRange(start: string, end: string) {
     </div>
   </section>
 
-  <!-- ───────────────── LAYER A: candidate pitch ───────────────── -->
-  <section class="section" id="candidate">
-    <div class="wrap">
-      <p class="eyebrow reveal">Layer A · {site.layerA.sectionTitle}</p>
-      <h2 class="section__title reveal">{site.identity.name}</h2>
-
-      {
-        hasRoles ? (
-          <div class="roles">
-            {roles.map(async (role) => {
-              const { Content } = await role.render();
-              return (
-                <article class="role panel reveal">
-                  <header class="role__head">
-                    <div>
-                      <h3 class="role__title">{role.data.title}</h3>
-                      <p class="role__company dim">
-                        {role.data.company}
-                        {role.data.kind === "venture" && <span class="tag">Venture</span>}
-                      </p>
-                    </div>
-                    <span class="role__range mono mute">
-                      {fmtRange(role.data.start, role.data.end)}
-                    </span>
-                  </header>
-                  {role.data.outcome && (
-                    <p class="role__outcome mute">Outcome: {role.data.outcome}</p>
-                  )}
-                  <p class="role__summary">{role.data.summary}</p>
-                  {role.data.accomplishments.length > 0 && (
-                    <ul class="role__acc">
-                      {role.data.accomplishments.map((a) => (
-                        <li>
-                          {a.metric && <strong class="role__metric">{a.metric}</strong>}
-                          <span>{a.statement}</span>
-                          {a.theme && <span class="tag">{themes[a.theme]}</span>}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <div class="role__long prose dim">
-                    <Content />
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        ) : (
-          <div class="pending panel reveal">
-            <span class="pending__badge">Intake in progress</span>
-            <p class="lede">
-              The candidate pitch is generated from {site.identity.name}’s real
-              work-history notes — captured through a structured intake interview.
-            </p>
-            <p class="dim">
-              That intake hasn’t run yet, so there’s nothing real to show here.
-              Rather than fill this space with a fabricated sample, the page
-              leaves it honest: the template, the content model, and the design
-              are built and waiting; the words land only once they trace to a
-              real role or venture (invariant 3). The system would rather show
-              you nothing than show you something untrue — which is, itself, the
-              point.
-            </p>
-            <div class="pending__themes">
-              <span class="mute">Built to surface:</span>
-              <span class="tag">Agent orchestration</span>
-              <span class="tag">AI implementation</span>
-              <span class="tag">Catching model errors</span>
-              <span class="tag">Solutions engineering</span>
-            </div>
-          </div>
-        )
-      }
-    </div>
-  </section>
+  <InTheWild />
 
   <!-- ───────────────── Footer ───────────────── -->
   <footer class="footer">
     <div class="wrap footer__inner">
       <div>
-        <span class="footer__name">{site.identity.name}</span>
-        <p class="mute">{site.identity.tagline}</p>
+        <span class="footer__name">{site.name}</span>
+        <p class="mute">{site.tagline}</p>
       </div>
       <nav class="footer__links" aria-label="Links">
-        {site.identity.links.email && <a href={`mailto:${site.identity.links.email}`}>Email</a>}
-        {site.identity.links.github && <a href={site.identity.links.github} rel="me">GitHub</a>}
-        {site.identity.links.linkedin && <a href={site.identity.links.linkedin} rel="me">LinkedIn</a>}
-        {site.identity.links.x && <a href={site.identity.links.x} rel="me">X</a>}
+        {site.links.email && <a href={`mailto:${site.links.email}`}>Email</a>}
+        {site.links.github && <a href={site.links.github} rel="me">GitHub</a>}
       </nav>
       <p class="footer__colophon mute">
         Designed, built, and deployed as part of the artifact. Astro · Cloudflare Pages.
@@ -343,37 +249,6 @@ function fmtRange(start: string, end: string) {
   .metric__val { font-size: clamp(2.4rem, 5vw, 3.4rem); color: var(--c-text); line-height: 1; }
   .metric__label { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em; color: var(--c-text-dim); text-transform: uppercase; }
   .metrics__note { font-size: var(--fs-small); line-height: var(--lh-snug); }
-
-  /* candidate / pending */
-  .pending { padding: var(--s-12) var(--s-8); display: flex; flex-direction: column; gap: var(--s-4); margin-top: var(--s-8); }
-  .pending__badge {
-    align-self: flex-start;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: var(--tracking-cap);
-    text-transform: uppercase;
-    color: var(--c-accent-warm);
-    border: 1px solid color-mix(in srgb, var(--c-accent-warm) 35%, var(--c-line));
-    border-radius: 100px;
-    padding: 0.3rem 0.8rem;
-  }
-  .pending .lede { max-width: var(--maxw-prose); }
-  .pending p.dim { max-width: var(--maxw-prose); font-size: var(--fs-small); line-height: var(--lh-snug); }
-  .pending__themes { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); margin-top: var(--s-2); }
-
-  /* roles (when content exists) */
-  .roles { display: flex; flex-direction: column; gap: var(--s-4); margin-top: var(--s-8); }
-  .role { padding: var(--s-8); display: flex; flex-direction: column; gap: var(--s-3); }
-  .role__head { display: flex; justify-content: space-between; gap: var(--s-4); flex-wrap: wrap; align-items: baseline; }
-  .role__title { font-size: var(--fs-h3); }
-  .role__company { display: inline-flex; align-items: center; gap: var(--s-2); }
-  .role__range { font-size: 0.8rem; }
-  .role__outcome { font-size: var(--fs-small); }
-  .role__summary { color: var(--c-text); }
-  .role__acc { list-style: none; margin: var(--s-2) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); }
-  .role__acc li { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s-2); font-size: var(--fs-small); }
-  .role__metric { color: var(--c-accent); font-family: var(--font-mono); }
-  .role__long { margin-top: var(--s-2); font-size: var(--fs-small); }
 
   /* footer */
   .footer { border-top: 1px solid var(--c-line); padding-block: var(--s-12); margin-top: var(--s-8); }

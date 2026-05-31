@@ -1,81 +1,48 @@
 /**
- * site.config.ts — the single instantiation seam.
+ * site.config.ts — the blackvest SHOWCASE (1-of-1) config.
  *
- * This showcase is a TEMPLATE. Each blackvest candidate gets their own
- * instance deployed to a `<candidate>.blackvest.ai` subdomain. Everything
- * candidate-specific lives in this one file (plus the `roles` content
- * collection for Layer A). Nothing here imports the private vault — content
- * is a manual, reviewed copy-over (privacy boundary, ADR-019 invariant 4).
+ * This repo is the system's own home page at the apex blackvest.ai. It is NOT
+ * a candidate page — candidate pages live in the separate (private)
+ * blackvest-candidate repo, each deployed to <candidate>.blackvest.ai and
+ * linked from the "in the wild" section below.
  *
- * To re-skin for a new candidate: edit `identity` + `theme` here, drop their
- * curated role notes into `src/content/roles/`, and deploy. No component edits.
+ * Never imports the private vault (ADR-019 invariant 4). Shows architecture +
+ * outcomes only, never implementation (invariant 6).
  */
 
-export interface SiteIdentity {
-  /** Display name shown in the masthead + hero. */
+export interface CandidateLink {
+  /** Display name. */
   name: string;
-  /** Short role line under the name. */
-  tagline: string;
-  /** The role family this candidate is targeting. */
-  targetRoles: string;
-  /** Optional contact / link surfaces. Empty strings are hidden. */
-  links: {
-    email?: string;
-    github?: string;
-    linkedin?: string;
-    x?: string;
-  };
-  /** Canonical site origin once the custom domain is attached (no trailing slash). */
-  origin: string;
-}
-
-export interface SiteTheme {
-  /** Accent / signal color (CSS color). Editorial-technical default is a cool cyan. */
-  accent: string;
-  /** Secondary accent used sparingly (e.g. the guardrail / human-gate motif). */
-  accentWarm: string;
+  /** Absolute URL to the live candidate page. */
+  url: string;
+  /** One-line framing of who they are / the role family. */
+  blurb: string;
 }
 
 export interface SiteConfig {
-  identity: SiteIdentity;
-  theme: SiteTheme;
-  /**
-   * Layer A gate. The candidate pitch renders real role notes when present.
-   * When the `roles` collection is empty, the site shows an honest
-   * "intake in progress" state instead of fabricated content (invariant 3).
-   * This flag is informational; the templates also check the collection
-   * directly, so it can never claim content that isn't there.
-   */
-  layerA: {
-    /** Headline for the candidate-pitch section. */
-    sectionTitle: string;
-  };
+  name: string;
+  tagline: string;
+  /** Canonical origin once the apex is attached (no trailing slash). */
+  origin: string;
+  links: { github?: string; email?: string };
+  /** Candidate pages the system has produced — the "in the wild" proof. */
+  candidates: CandidateLink[];
+  theme: { accent: string; accentWarm: string };
 }
 
-// ── Zander's instance (candidate #0) ───────────────────────────────────────
-// Brand decision (Plan C kickoff): personal-name brand, served under a
-// blackvest.ai subdomain. NOTE: full legal name is intentionally left as the
-// short handle until the `/career-interview` intake confirms how Zander wants
-// to be presented — do not fabricate a surname (invariant 3).
 export const site: SiteConfig = {
-  identity: {
-    name: 'Zander',
-    tagline: 'AI operations · solutions engineering · agent orchestration',
-    targetRoles: 'AI operations / AI maintenance / solutions engineering',
-    links: {
-      github: 'https://github.com/DreamwareDevelopment',
-      email: '',
-      linkedin: '',
-      x: '',
+  name: 'blackvest',
+  tagline: 'An agentic career system — architecture, guardrails, outcomes.',
+  origin: 'https://blackvest.ai',
+  links: { github: 'https://github.com/DreamwareDevelopment' },
+  candidates: [
+    {
+      name: 'Zander Pyle',
+      // INTERIM: points at the live pages.dev until zander-pyle.blackvest.ai
+      // resolves post-DNS. Swap to https://zander-pyle.blackvest.ai at attach.
+      url: 'https://zander-pyle.pages.dev',
+      blurb: 'AI operations · solutions engineering · agent orchestration',
     },
-    // Set to the final subdomain (e.g. https://zander.blackvest.ai) at domain attach.
-    origin: '',
-  },
-  theme: {
-    accent: '#5ad1e6',
-    accentWarm: '#e6b35a',
-  },
-  layerA: {
-    sectionTitle: 'The candidate',
-  },
+  ],
+  theme: { accent: '#5ad1e6', accentWarm: '#e6b35a' },
 };

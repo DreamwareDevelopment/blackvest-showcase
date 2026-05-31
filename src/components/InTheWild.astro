@@ -1,0 +1,43 @@
+---
+import { site } from "../site.config";
+const candidates = site.candidates;
+---
+
+<section class="section" id="in-the-wild">
+  <div class="wrap">
+    <p class="eyebrow reveal">The system, in the wild</p>
+    <h2 class="section__title reveal">What it produces</h2>
+    <p class="lede prose reveal dim">
+      Every candidate the system runs gets their own deep-dive page — generated
+      from their real history, customized to them, deployed to its own home.
+      Here is what that looks like.
+    </p>
+
+    <div class="wild">
+      {
+        candidates.map((c) => (
+          <a class="wild__card panel reveal" href={c.url} rel="noopener">
+            <div class="wild__head">
+              <span class="wild__name">{c.name}</span>
+              <span class="wild__arrow" aria-hidden="true">↗</span>
+            </div>
+            <p class="wild__blurb dim">{c.blurb}</p>
+            <span class="wild__url mono mute">{c.url.replace("https://", "")}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .section__title { font-size: var(--fs-h2); margin-block: var(--s-3) var(--s-6); max-width: 20ch; }
+  .wild { display: grid; grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); gap: var(--s-4); margin-top: var(--s-8); }
+  .wild__card { padding: var(--s-6); display: flex; flex-direction: column; gap: var(--s-3); transition: border-color 0.3s var(--ease), transform 0.3s var(--ease); }
+  .wild__card:hover { border-color: var(--c-accent); transform: translateY(-2px); text-decoration: none; }
+  .wild__head { display: flex; align-items: center; justify-content: space-between; }
+  .wild__name { font-size: var(--fs-h3); font-weight: 650; color: var(--c-text); }
+  .wild__arrow { color: var(--c-accent); }
+  .wild__blurb { font-size: var(--fs-small); line-height: var(--lh-snug); flex: 1; }
+  .wild__url { font-size: 0.78rem; }
+</style>
