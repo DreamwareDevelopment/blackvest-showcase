@@ -32,7 +32,7 @@ export interface SiteConfig {
 
 export const site: SiteConfig = {
   name: 'blackvest',
-  tagline: 'An agentic career system — architecture, guardrails, outcomes.',
+  tagline: 'An agentic career system: architecture, guardrails, outcomes.',
   origin: 'https://blackvest.ai',
   links: { github: 'https://github.com/DreamwareDevelopment' },
   candidates: [
