@@ -1,28 +1,31 @@
 ---
-// The career-* orchestration graph. Renders the ARCHITECTURE only:
-// the skills as named stages, the funnel they drive, and the human gate.
-// Deliberately shows no prompts, no scoring rubrics, no engine code
-// (ADR-019 invariant 6 — reveal depth = architecture + outcomes, never
-// implementation). Each stage is a black box with an input and an output.
+// The orchestration graph. Renders the ARCHITECTURE only: each stage as a
+// role, the funnel they drive, and the human gate.
+// Deliberately shows no prompts, no scoring rubrics, no engine code — and not
+// the literal skill slugs either. The `career-*` names are withheld so the
+// page never signals the build substrate; `ops` labels the functions a stage
+// runs, not the skills that implement them (ADR-019 invariant 6 — reveal
+// depth = architecture + outcomes, never implementation). Each stage is a
+// black box with an input and an output.
 
 const stages = [
   {
     id: "source",
-    skill: "career-source",
+    ops: "source · fit-score",
     role: "Discover",
     out: "sourced",
     body: "Finds real, current postings and fit-scores each against the candidate's history. It curates and ranks; it never maximizes count.",
   },
   {
     id: "tailor",
-    skill: "career-jd-match · career-resume",
+    ops: "jd-decompose · résumé",
     role: "Tailor",
     out: "tailored",
     body: "Decomposes the JD, scores fit, names the honest gaps, and produces a tailored résumé and pitch. Every claim traces to a real accomplishment.",
   },
   {
     id: "assemble",
-    skill: "career-apply",
+    ops: "package · cover-letter",
     role: "Assemble",
     out: "awaiting-approval",
     body: "Builds the submission package, a tailored résumé plus a cover letter, and presents it for review.",
@@ -48,7 +51,7 @@ const funnel = [
         <li class="stage panel reveal" style={`--i:${i}`}>
           <div class="stage__head">
             <span class="stage__role">{s.role}</span>
-            <code class="stage__skill">{s.skill}</code>
+            <code class="stage__ops">{s.ops}</code>
           </div>
           <p class="stage__body dim">{s.body}</p>
           <div class="stage__out">
@@ -119,7 +122,7 @@ const funnel = [
     font-size: var(--fs-h3);
     font-weight: 650;
   }
-  .stage__skill {
+  .stage__ops {
     font-size: 0.78rem;
     color: var(--c-accent);
     background: var(--c-bg-sink);
