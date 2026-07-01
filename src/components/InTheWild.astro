@@ -3,6 +3,7 @@ import { site } from "../site.config";
 const candidates = site.candidates;
 ---
 
+{candidates.length > 0 && (
 <section class="section" id="in-the-wild">
   <div class="wrap">
     <p class="eyebrow reveal">The system, in the wild</p>
@@ -29,6 +30,7 @@ const candidates = site.candidates;
     </div>
   </div>
 </section>
+)}
 
 <style>
   .section__title { font-size: var(--fs-h2); margin-block: var(--s-3) var(--s-6); max-width: 20ch; }

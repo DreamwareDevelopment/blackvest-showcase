@@ -35,12 +35,8 @@ export const site: SiteConfig = {
   tagline: 'An agentic career system: architecture, guardrails, outcomes.',
   origin: 'https://blackvest.ai',
   links: { github: 'https://github.com/DreamwareDevelopment' },
-  candidates: [
-    {
-      name: 'Zander Pyle',
-      url: 'https://zander-pyle.blackvest.ai',
-      blurb: 'AI operations · solutions engineering · agent orchestration',
-    },
-  ],
+  // No live candidate pages yet — the decommissioned zander-pyle instance is gone; real instances
+  // are added back here once produced through the productized flow. Empty → the section is hidden.
+  candidates: [],
   theme: { accent: '#5ad1e6', accentWarm: '#e6b35a' },
 };
