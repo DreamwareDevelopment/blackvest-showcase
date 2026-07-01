@@ -1,7 +1,8 @@
 /**
  * site.config.ts — the blackvest SHOWCASE (1-of-1) config.
  *
- * This repo is the system's own home page at the apex blackvest.ai. It is NOT
+ * This repo is the system's public case-study, deployed to showcase.blackvest.ai
+ * (the apex blackvest.ai is the separate blackvest-site marketing repo). It is NOT
  * a candidate page — candidate pages live in the separate (private)
  * blackvest-candidate repo, each deployed to <candidate>.blackvest.ai and
  * linked from the "in the wild" section below.
